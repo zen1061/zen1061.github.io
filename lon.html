@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zamboanga City - Philippines</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, Helvetica, sans-serif, Verdana, sans-serif;
+        }
+
+        body {
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+            height: 100vh;
+        }
+
+       
+        .slider {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide:nth-child(1) {
+            background-image: url('https://images.unsplash.com/photo-1582139329536-e7284fece509?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        }
+
+        .slide:nth-child(2) {
+            background-image: url('https://images.unsplash.com/photo-1527631746610-bca00a040d60?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        }
+
+        .slide:nth-child(3) {
+            background-image: url('https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        }
+
+        .slide:nth-child(4) {
+            background-image: url('https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+       
+        .navbar {
+            display: none; 
+            background-color: rgba(0, 0, 0, 0.8);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-logo {
+            width: 50px;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 215, 0, 0.2);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .nav-links a.active {
+            background-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #FFD700;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+       
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .logo {
+            width: 100px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+        }
+
+        h1 {
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #FFD700;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.5);
+            font-size: 16px;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 38px;
+            color: #FFD700;
+        }
+
+        button {
+            background-color: #4B0082;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-top: 10px;
+            width: 100%;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background-color: #5a1a9a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .forgot-password {
+            display: block;
+            margin-top: 15px;
+            color: #FFD700;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .social-login {
+            margin-top: 25px;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            padding-top: 20px;
+        }
+
+        .social-login p {
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .facebook {
+            background-color: #3b5998;
+        }
+
+        .gmail {
+            background-color: #DB4437;
+        }
+
+        .contact {
+            background-color: #FFD700;
+            color: #333;
+        }
+
+        
+        .homepage {
+            display: none;
+            padding: 100px 40px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .homepage h1 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .homepage-content {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .vinta {
+            position: absolute;
+            width: 120px;
+            animation: sail 25s linear infinite;
+            opacity: 0.9;
+            z-index: -1;
+        }
+
+        @keyframes sail {
+            0% { transform: translateX(-200px) translateY(100px) rotate(0deg); }
+            50% { transform: translateX(50vw) translateY(50px) rotate(5deg); }
+            100% { transform: translateX(100vw) translateY(100px) rotate(0deg); }
+        }
+
+        .attractions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
+        .attraction-card {
+            width: calc(33.33% - 20px);
+            background-color: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .attraction-card:hover {
+            transform: translateY(-10px);
+            background-color: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .attraction-card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            height: 180px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .attraction-card h3 {
+            color: #FFD700;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .attraction-card p {
+            color: #ddd;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .welcome-message {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #eee;
+            text-align: justify;
+        }
+
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4B0082;
+            padding: 10px 20px;
+            border-radius: 8px;
+            z-index: 50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background-color: #5a1a9a;
+            transform: translateY(-2px);
+        }
+
+        .contact-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #FFD700;
+        }
+
+        .contact-item i {
+            font-size: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #FFD700;
+            font-size: 14px;
+        }
+
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            height: 200px;
+            position: relative;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            color: #FFD700;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+
+        
+        .events-container {
+            margin-top: 30px;
+        }
+
+        .event-card {
+            background-color: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .event-card h3 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        .event-date {
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .event-card p {
+            color: #ddd;
+            line-height: 1.5;
+        }
+
+       
+        @media (max-width: 992px) {
+            .attraction-card {
+                width: calc(50% - 15px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background-color: rgba(0, 0, 0, 0.9);
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .login-container {
+                width: 90%;
+                padding: 20px;
+            }
+            
+            .attraction-card {
+                width: 100%;
+            }
+            
+            .homepage {
+                padding: 80px 20px 20px;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+
+            .logout-btn {
+                top: 15px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sliding Background -->
+    <div class="slider">
+        <div class="slide active"></div>
+        <div class="slide"></div>
+        <div class="slide"></div>
+        <div class="slide"></div>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Login Form -->
+    <div class="container" id="loginContainer">
+        <div class="login-container">
+            <img src="log.jpeg" alt="Zamboanga City Logo" class="logo">
+            <h1>Welcome to Zamboanga City</h1>
+            
+            <div class="input-group">
+                <label for="username">Username</label>
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="username" placeholder="Enter your username">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            
+            <button id="loginBtn">LOGIN</button>
+            <a href="#" class="forgot-password">Forgot Password?</a>
+            
+            <div class="social-login">
+                <p>Or login with:</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon facebook" title="Login with Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-icon gmail" title="Login with Gmail">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a href="#" class="social-icon contact" title="Contact Us">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <img src="log.jpeg" alt="Zamboanga City Logo" class="nav-logo">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+                <li><a href="#attractions" class="nav-link" data-section="attractions">Attractions</a></li>
+                <li><a href="#gallery" class="nav-link" data-section="gallery">Gallery</a></li>
+                <li><a href="#events" class="nav-link" data-section="events">Events</a></li>
+                <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Homepage Content -->
+    <div class="homepage" id="homepage">
+        <button class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <h1>Discover the Beautiful Places of Zamboanga City</h1>
+            
+            <div class="homepage-content">
+                <img src="vin.jpeg" alt="Vinta" class="vinta">
+                
+                <h1>About Zamboanga City - Philippines</h1>
+                
+                <p class="welcome-message">
+                    Welcome to Zamboanga City, the vibrant cultural melting pot of the Philippines where East meets West. 
+                    Known as "Asia's Latin City," Zamboanga boasts a unique blend of Spanish, Malay, and indigenous influences. 
+                    From the colorful vintas to the famous pink sand beach of Sta. Cruz Island, our city offers unforgettable 
+                    experiences that celebrate our rich heritage and natural beauty. Zamboanga City is also known for its Chavacano 
+                    language, a Spanish-based creole, and its delicious cuisine featuring curacha, knickerbocker, and other local delicacies.
+                </p>
+            </div>
+        </section>
+
+        <!-- Attractions Section -->
+        <section id="attractions" class="section">
+            <div class="homepage-content">
+                <h1>Must-Visit Attractions in Zamboanga</h1>
+                
+                <div class="attractions">
+                    <div class="attraction-card">
+                        <img src="san.jpeg" alt="Cruz Island">
+                        <h3>Sta. Cruz Island</h3>
+                        <p>Famous for its pink sand beach caused by crushed red coral mixed with white sand, this protected marine sanctuary offers crystal-clear waters perfect for snorkeling.</p>
+                    </div>
+                    
+                    <div class="attraction-card">
+                        <img src="pel.jpeg" alt="Fort Pilar">
+                        <h3>Fort Pilar</h3>
+                        <p>This 17th-century military defense fortress is now a national cultural treasure and museum showcasing Zamboanga's rich history and heritage.</p>
+                    </div>
+                    
+                    <div class="attraction-card">
+                        <img src="pas.jpeg" alt="Paseo del Mar">
+                        <h3>Paseo del Mar</h3>
+                        <p>The city's premier waterfront park with stunning sunset views, cultural performances, and a perfect place to try local street food.</p>
+                    </div>
+                    
+                    <div class="attraction-card">
+                        <img src="yakan.jpeg" alt="Yakan Weaving Village">
+                        <h3>Yakan Weaving Village</h3>
+                        <p>Visit this village to see the intricate art of Yakan weaving and purchase authentic handwoven fabrics known for their vibrant colors and geometric patterns.</p>
+                    </div>
+                    
+                    <div class="attraction-card">
+                        <img src="mer.jpeg" alt="Merloquet Falls">
+                        <h3>Merloquet Falls</h3>
+                        <p>A beautiful two-tiered waterfall located in the lush forests of Sibulao, perfect for nature lovers and adventure seekers.</p>
+                    </div>
+                    
+                    <div class="attraction-card">
+                        <img src="sanata.jpeg" alt="Great Santa Cruz Island">
+                        <h3>Great Santa Cruz Island</h3>
+                        <p>Known for its giant clams and excellent snorkeling spots with diverse marine life, this island is a paradise for underwater enthusiasts.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="section">
+            <div class="homepage-content">
+                <h1>Zamboanga City Gallery</h1>
+                
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <img src="ni.jpeg" alt="Zamboanga Cityscape">
+                        <div class="gallery-caption">Zamboanga City Skyline</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="download (1).jpeg" alt="Vinta Sailing">
+                        <div class="gallery-caption">Traditional Vinta Boats</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="park.jpeg" alt="City Park">
+                        <div class="gallery-caption">ZAMBOANGA CITY Asia's Latin City Hall and Plaza Rizal </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="zam.jpeg" alt="Fort Pilar">
+                        <div class="gallery-caption">Historic Fort Pilar</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="map.jpeg" alt="City Map">
+                        <div class="gallery-caption">Zamboanga City Map</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="ping.jpeg" alt="Pink Sand Beach">
+                        <div class="gallery-caption">Sta. Cruz Pink Sand Beach</div>
+                        </div>
+                    <div class="gallery-item">
+                        <img src="w.jpeg" alt="Pink Sand Beach">
+                        <div class="gallery-caption">Dakak Park & Beach Resort</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="e.jpeg" alt="Pink Sand Beach">
+                        <div class="gallery-caption">little Santa Cruz Island</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="h.jpeg" alt="Pink Sand Beach">
+                        <div class="gallery-caption">zamboanga hermosa festival</div>    
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="section">
+            <div class="homepage-content">
+                <h1>Upcoming Events in Zamboanga</h1>
+                
+                <div class="events-container">
+                    <div class="event-card">
+                        <h3>Hermosa Festival</h3>
+                        <div class="event-date">October 1-12, 2025</div>
+                        <p>The Zamboanga Hermosa Festival, also known as Fiesta Pilar, is a month-long celebration in honor of Our Lady of the Pillar, the city's patron saint. The festival features street dancing, cultural shows, and the famous Regatta de Zamboanga with colorful vinta sailboats.</p>
+                    </div>
+                    
+                    <div class="event-card">
+                        <h3>Chavacano Cultural Night</h3>
+                        <div class="event-date">June 23, 2025</div>
+                        <p>A celebration of Zamboanga's unique Chavacano language and culture featuring traditional dances, music, and theatrical performances showcasing the city's Hispanic heritage.</p>
+                    </div>
+                    
+                    <div class="event-card">
+                        <h3>Zamboanga Food Festival</h3>
+                        <div class="event-date">August 15-18, 2025</div>
+                        <p>A culinary event showcasing Zamboanga's unique cuisine including curacha (deep-sea crab), knickerbocker (fruit dessert), and other local delicacies. Cooking demonstrations and food competitions included.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="homepage-content">
+                <h1>Contact Zamboanga City Tourism</h1>
+                
+                <div class="welcome-message">
+                    <p>For more information about Zamboanga City tourism, accommodations, or tour packages, please contact us through the following channels:</p>
+                </div>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(072) 225-1061</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-facebook-f"></i>
+                        <span>Zamboanga City Govt</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>info@zamboanga.gov.ph</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>City Hall, Zamboanga City, Philippines</span>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>&copy; 2025 Zamboanga City Government. All Rights Reserved.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            function nextSlide() {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }
+            
+            
+            setInterval(nextSlide, 5000);
+            
+           
+            document.getElementById('loginBtn').addEventListener('click', function() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                
+                if (username && password) {
+                    document.getElementById('loginContainer').style.display = 'none';
+                    document.getElementById('homepage').style.display = 'block';
+                    document.getElementById('navbar').style.display = 'block';
+                    
+                    
+                    createVintas();
+                } else {
+                    alert('Please enter both username and password');
+                }
+            });
+            
+           
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                document.getElementById('homepage').style.display = 'none';
+                document.getElementById('navbar').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'flex';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                
+                
+                const vintas = document.querySelectorAll('.vinta');
+                vintas.forEach(vinta => {
+                    if (!vinta.classList.contains('original-vinta')) {
+                        vinta.remove();
+                    }
+                });
+            });
+            
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                   
+                    this.classList.add('active');
+                    const sectionId = this.getAttribute('data-section');
+                    document.getElementById(sectionId).classList.add('active');
+                    
+                    
+                    document.getElementById('navLinks').classList.remove('active');
+                });
+            });
+            
+            
+            document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+                document.getElementById('navLinks').classList.toggle('active');
+            });
+            
+            
+            function createVintas() {
+                
+                const originalVinta = document.querySelector('.vinta');
+                if (originalVinta) {
+                    originalVinta.classList.add('original-vinta');
+                    originalVinta.style.animationDelay = '0s';
+                }
+                
+                
+                for (let i = 0; i < 4; i++) {
+                    const vinta = document.createElement('img');
+                    vinta.src = 'vin.png';
+                    vinta.className = 'vinta';
+                    vinta.style.top = `${Math.random() * 70 + 10}%`;
+                    vinta.style.width = `${Math.random() * 50 + 80}px`;
+                    vinta.style.animationDuration = `${Math.random() * 10 + 20}s`;
+                    vinta.style.animationDelay = `${Math.random() * 10}s`;
+                    document.body.appendChild(vinta);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
